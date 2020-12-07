@@ -1,0 +1,126 @@
+#include <iostream>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+using namespace std;
+
+string ans;
+int disc;                                      // итоговая скидка
+long double price_all_fake = 0;                // итоговая сумма без скидки 
+long int price_all = 0;                        // итоговая сумма со скидкой
+int count_e = 0;                               // кол-во взятых яиц 
+int count_m = 0;                               // кол-во взятого молока
+int count_b = 0;                               // кол-во взятого хлеба
+int e;
+int m;
+int b;
+string prod_name[4];                   //названия продукта
+int price[4];                          // цены продуктов
+char prod[4];                          // введенный штрих-код   
+const char eggs[4] = { '2', '6', '1', '8' };   
+const char milk[4] = { '1', '7', '5', '3' };
+const char bread[4] = { '3', '9', '2', '4' };
+
+void bread_f() {
+	price_all_fake += 36;
+	price_all += 30;
+	count_b += 1;
+	cout << "##########" << endl;
+	cout << "X" << count_b << "    " << "Bread 0.3 kg. -\t36p.  (20 % DISCOUNT)" << endl;
+	cout << "##########" << endl;
+	prod_name[2] = "Bread";
+	price[2] = 30;
+	
+}
+
+void milk_f() {
+	price_all_fake+= 42;
+	price_all += 40;
+	count_m += 1;
+	cout << "##########" << endl;
+	cout << "X" << count_m << "    " << "Milk 1 l. -    42p.  (5 % DISCOUNT)" << endl;
+	cout << "##########" << endl;
+	prod_name[1] = "Milk";
+	price[1] = 40;
+	
+}
+
+void eggs_f() {
+	price_all_fake += 100;
+	price_all += 90;
+	count_e ++;
+	cout << "##########" << endl;
+	cout << "X" << count_e << "   " << "Eggs 10 pcs. -    100p.  (10 % DISCOUNT)" << endl;
+	cout << "##########" << endl;
+	prod_name[0] = "Eggs";
+	price[0] = 90;
+	
+}
+
+int  main() {
+	cout << "Are you ready?" << endl;
+	cout << "'+' = Yes      '-' = No" << endl;
+	cin >> ans;
+	
+	while (ans == "+") {
+        
+		cout << "Input barcode: ";
+		cin >> prod;
+
+		for (int i = 0; i < 4; i++) {
+
+			if (prod[i] == eggs[i]) {
+				e++;
+				if (e == 4) {
+					eggs_f();
+				}
+			}
+
+			if (prod[i] == milk[i]) {
+				m++;
+				if (m == 4) {
+					milk_f();
+				}
+			}
+			if (prod[i] == bread[i]) {
+				b++;
+				if (b == 4) {
+					bread_f();
+				}
+			}
+		}
+		if (e != 4 && m != 4 && b != 4) {
+			cout << "This barcode does not exist" << endl;
+		}
+		b = 0;
+		e = 0;
+		m = 0;
+		for (int i = 0; i < 4; i++) {
+			prod[i] = 0;
+	    }
+			cout << "Want to add another product?" << endl;
+			cout << "'+' = Yes      '-' = No" << endl;
+			cin >> ans;
+	}
+	disc = (price_all_fake - price_all) / (price_all_fake / 100);
+	cout << "Your check:" << endl;
+	cout << "#############################" << endl;
+	if (price[0] == 90) {
+		cout << "X" << count_e << "    " << prod_name[0] << " - " << price[0];
+		cout << "   " << "Result: " << count_e * price[0] << endl;
+	}
+	if (price[1] == 40) {
+		cout << "X" << count_m << "    " << prod_name[1] << " - " << price[1];
+		cout << "   " << "Result: " << count_m * price[1] << endl;
+	}
+	if (price[2] == 30) {
+		cout << "X" << count_b << "   " << prod_name[2] << " - " << price[2];
+		cout << "   " << "Result: " << count_b * price[2] << endl;
+	}
+
+	cout << "\nTotal discount:\t " << disc << "%" << endl;
+	cout << "\nTotal amount:\t" << price_all << "p." << endl;
+	cout << "#############################" << endl;
+	system("pause");
+	return 0;
+}
